@@ -9,5 +9,8 @@ http://localhost:3000/employee/average-salary/Frontend Developer
 http://localhost:3000/employee/top-earner/3
 
 
-<h3>To get the employees of given salary range pass the small value first and large after it in params like below url</h3>
-http://localhost:3000/employee/salary-range/50000/100000
+<h3>To get the employees of given salary range</h3>
+http://localhost:3000/employee/salary-range?greaterThan=50000&lessThan=100000
+
+<h3>Check the retention rate</h3>
+http://localhost:3000/employee/retention-rate?employeeAtStart=50&employeeAtEnd=40&employeeWhoLeft=10
