@@ -1,4 +1,4 @@
-# Tezerect Assesment
+# Tezeract Assesment
 <h3>To get all employees</h3>
 http://localhost:3000/employee/get 
 
