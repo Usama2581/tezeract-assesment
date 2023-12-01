@@ -75,6 +75,8 @@ export class EmployeeService {
   async findByExperience(lessThan, greaterThan) {
 
     let employees = []
+    const less = lessThan * 365
+    const greater = greaterThan * 365
     const result = await this.employee.find()
 
     if (result.length === 0) {
@@ -89,7 +91,7 @@ export class EmployeeService {
         const difference: number = currentDate.getTime() - joiningDate.getTime();
         const days = Math.floor(difference / (1000 * 60 * 60 * 24))
 
-        if (days < lessThan * 365 && days > greaterThan * 365) {
+        if (days < less && days > greater) {
           console.log(days)
           employees.push(result[i])
         }
