@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Query } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 
@@ -17,7 +17,7 @@ export class EmployeeController {
     return this.employeeService.findAll();
   }
 
-  @Get('/salary/:position')
+  @Get('/average-salary/:position')
   findAverageSalary(@Param('position') param) {
     return this.employeeService.findAverageSalary(param)
   }
@@ -33,18 +33,23 @@ export class EmployeeController {
   }
 
   //small num in first param
-  @Get('/salary-range/:num1/:num2')
-  findSalaryRange(@Param('num1') num1, @Param('num2') num2) {
-    return this.employeeService.findSalaryRange(num1, num2)
+  @Get('/salary-range')
+  findSalaryRange(@Query('lessThan') lessThan, @Query('greaterThan') greaterThan) {
+    return this.employeeService.findSalaryRange(lessThan, greaterThan)
   }
 
-  @Get('/retention-rate/:employeeAtStart/:employeeAtEnd/:employeeWhoLeft')
+  @Get('/retention-rate')
   findRetentionRate(
-    @Param('employeeAtStart') employeeAtStart,
-    @Param('employeeAtEnd') employeeAtEnd,
-    @Param('employeeWhoLeft') employeeWhoLeft
+    @Query('employeeAtStart') employeeAtStart,
+    @Query('employeeAtEnd') employeeAtEnd,
+    @Query('employeeWhoLeft') employeeWhoLeft
   ) {
-    return this.employeeService.findRetentionRate(employeeAtEnd, employeeAtStart, employeeWhoLeft)
+    return this.employeeService.findRetentionRate(employeeAtStart, employeeAtEnd, employeeWhoLeft)
+  }
+
+  @Get('/experience')
+  findByExperience(@Query('lessThan') lessThan, @Query('greaterThan') greateerThan) {
+    return this.employeeService.findByExperience(lessThan, greateerThan)
   }
 
 }

@@ -18,6 +18,7 @@ export class EmployeeService {
   }
 
   async findAverageSalary(param) {
+
     let sum = 0
     const result = await this.employee.find({ position: param })
 
@@ -43,15 +44,15 @@ export class EmployeeService {
 
   }
 
-  async findSalaryRange(num1, num2) {
-    // console.log(num1, num2)
+  async findSalaryRange(lessThan, greaterThan) {
 
     const result = await this.employee.find({
       $and: [
-        { salary: { $gt: num1 } },
-        { salary: { $lt: num2 } }
+        { salary: { $gt: greaterThan } },
+        { salary: { $lt: lessThan } }
       ]
     })
+
     if (result.length === 0) {
       throw new NotFoundException('Employee of given salary range not found')
     }
@@ -64,9 +65,43 @@ export class EmployeeService {
     return this.employee.findByIdAndDelete(id)
   }
 
-  findRetentionRate(employeeAtEnd, employeeWhoLeft, employeeAtStart) {
-    const retentionRate = ((employeeAtEnd - employeeWhoLeft) / employeeAtStart) * 100
-    return { Retention_Rate: retentionRate }
+  findRetentionRate(employeeAtStart, employeeAtEnd, employeeWhoLeft) {
+
+    const tempRetentionRate = ((employeeAtEnd - employeeWhoLeft) / employeeAtStart) * 100
+    return { Retention_Rate: tempRetentionRate }
+
+  }
+
+  async findByExperience(lessThan, greaterThan) {
+
+    let employees = []
+    const result = await this.employee.find()
+
+    if (result.length === 0) {
+      throw new NotFoundException('Employees not found.')
+    }
+    else {
+      
+      for (let i = 0; i < result.length; i++) {
+        
+        const currentDate: Date = new Date()
+        const joiningDate: Date = new Date(result[i].joiningDate);
+        const difference: number = currentDate.getTime() - joiningDate.getTime();
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24))
+
+        if (days < lessThan * 365 && days > greaterThan * 365) {
+          console.log(days)
+          employees.push(result[i])
+        }
+      }
+    }
+
+    if (employees.length === 0) {
+      throw new NotFoundException('Employees with the experience given not found.')
+    }
+    else {
+      return employees
+    }
   }
 
 }
